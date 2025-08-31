@@ -46,8 +46,8 @@ function on_signal()
 end
 ```
 
-Note that the `on_signal` function is implemented as a single command block
-chain where everything happens in the same game tick. As a result, the two
+Note that the `on_signal` function is implemented as a single chain of command
+blocks where everything happens in the same game tick. As a result, the two
 calls to `time query gametime` will return the same value.
 
 Also, the name `ticks0` is completely arbitrary, use whatever name makes sense
@@ -108,7 +108,7 @@ as for clock timing):
 ### Removing the counters
 
 Deleting the *Counters* and *tmp* objectives is enough to reset everything with
-a two blocks chain:
+a chain of two blocks:
 
     sscoreboard objectives remove Counters
     scoreboard objectives remove tmp
