@@ -3,6 +3,8 @@
 
 ## Redstone Counters
 
+[Preview](https://endingcredits.github.io/litematic-viewer/?remote-url=https%3A%2F%2Fgithub.com%2FBradylus%2FMinecraft%2Fraw%2Frefs%2Fheads%2Fmain%2Fschematics%2FRedstone%2520Counters.litematic)
+
 A set of command blocks to help debug timings in redstone circuits.
 
 These use the scoreboard system. The Minecraft scoreboard is meant to keep track
@@ -132,7 +134,19 @@ instructions.
 
 ## Sugar Cane Farm
 
-This is a Piston/BUD based sugar cane farm (no observers needed). Fairly cheap,
-ideal for early game. The schematic is for a 31 blocks long farm, but the base
-size is 15x1 (as far as the redstone on top of the farm can reach without the
-target block/repeater trickery to extend it).
+This is a Piston/BUD based sugar cane farm (no observers needed). There are two versions:
+
+- ([Sugar Cane Farm (BUD)](https://endingcredits.github.io/litematic-viewer/?remote-url=https%3A%2F%2Fgithub.com%2FBradylus%2FMinecraft%2Fraw%2Frefs%2Fheads%2Fmain%2Fschematics%2FSugar%2520Cane%2520Farm%2520%28BUD%29.litematic)),
+  this is the basic model with 15 sugar cane crops. Fairly cheap, requires only
+iron and redstone, your "day two" farm.
+
+- [Sugar Cane Farm x31 (BUD)](https://endingcredits.github.io/litematic-viewer/?remote-url=https%3A%2F%2Fgithub.com%2FBradylus%2FMinecraft%2Fraw%2Frefs%2Fheads%2Fmain%2Fschematics%2FSugar%2520Cane%2520Farm%2520%2520x31%2520%28BUD%29.litematic)
+is 31 blocks long and requires a slime block. This is just a demo to show
+another way to implement the block update detector. This one is actually a
+bit faster. 
+
+The glass blocks can be replaced by any solid block or top slab. The white
+concrete can be replaced by any solid block.
+
+I'd recommend building only the small variant and packing a few of them in a
+single chunk with an ender pearl chunk loader.
