@@ -136,11 +136,11 @@ instructions.
 
 This is a Piston/BUD based sugar cane farm (no observers needed). There are two versions:
 
-- ([Sugar Cane Farm (BUD)](https://endingcredits.github.io/litematic-viewer/?remote-url=https%3A%2F%2Fgithub.com%2FBradylus%2FMinecraft%2Fraw%2Frefs%2Fheads%2Fmain%2Fschematics%2FSugar%2520Cane%2520Farm%2520%28BUD%29.litematic)),
+- [Sugar Cane Farm (BUD)](https://endingcredits.github.io/litematic-viewer/?remote-url=https%3A%2F%2Fgithub.com%2FBradylus%2FMinecraft%2Fraw%2Frefs%2Fheads%2Fmain%2Fschematics%2FSugar%2520Cane%2520Farm%2520%28BUD%29.litematic),
   this is the basic model with 15 sugar cane crops. Fairly cheap, requires only
 iron and redstone, your "day two" farm.
 
-- [Sugar Cane Farm x31 (BUD)](https://endingcredits.github.io/litematic-viewer/?remote-url=https%3A%2F%2Fgithub.com%2FBradylus%2FMinecraft%2Fraw%2Frefs%2Fheads%2Fmain%2Fschematics%2FSugar%2520Cane%2520Farm%2520%2520x31%2520%28BUD%29.litematic)
+- [Sugar Cane Farm x31 (BUD)](https://endingcredits.github.io/litematic-viewer/?remote-url=https%3A%2F%2Fgithub.com%2FBradylus%2FMinecraft%2Fraw%2Frefs%2Fheads%2Fmain%2Fschematics%2FSugar%2520Cane%2520Farm%2520x31%2520%28BUD%29.litematic)
 is 31 blocks long and requires a slime block. This is just a demo to show
 another way to implement the block update detector. This one is actually a
 bit faster. 
