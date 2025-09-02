@@ -118,7 +118,21 @@ a chain of two blocks:
 
 ### Resetting counters
 
-This is done by simply deleting the counters then initializing them again.
+The schematic does not include dedicated command blocks for this. Just delete the
+counters then initialize them again to reset all counters.
+
+If really needed, this can be done with the following commands:
+
+    scoreboard players reset * Conters
+    scoreboard players reset * tmp
+
+All counters will be removed. To remove a single counter, replace the "*" with
+the counter name. For example, to remove a counter named "ticks0":
+
+    scoreboard players reset ticks0 Conters
+    scoreboard players reset ticks0 tmp
+
+Just don't forget to remove the counter(s) from both objectives, `Counters` and `tmp`.
 
 
 ### Schematic contents
