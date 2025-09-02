@@ -8,3 +8,4 @@ The contents of this github repository are © 2025 Bradylus and licensed under <
 
 - [Vanilla Tweaks](https://vanillatweaks.net/) — My config: https://vanillatweaks.net/share#KipEVn
 - [JANKY AF litematic viewer](https://endingcredits.github.io/litematic-viewer/) by Ending_Credits
+- [Redstone Tools Mod](https://github.com/RedstoneTools/redstonetools-mod)
