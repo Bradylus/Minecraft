@@ -164,3 +164,19 @@ concrete can be replaced by any solid block.
 
 I'd recommend building only the small variant and packing a few of them in a
 single chunk with an ender pearl chunk loader.
+
+
+## Universal Crafter
+
+[Preview](https://endingcredits.github.io/litematic-viewer/?remote-url=https%3A%2F%2Fgithub.com%2FBradylus%2FMinecraft%2Fraw%2Frefs%2Fheads%2Fmain%2Fschematics%2FUniversal%2520Crafter%252012gt.litematic)
+
+This contraption crafts items at a rate of 12 game ticks/item (that's 2/3 hopper speed).
+
+TODO: how it's working, etc.
+
+TODO: This requires some setup before use.
+
+TODO: troubleshooting, and what to do on ingredient shortage.
+
+It's theoretically possible to achieve hopper speed by using 5 sides of the crafter for input, but
+I don't feel like untangling the resulting noodle soup of droppers.
