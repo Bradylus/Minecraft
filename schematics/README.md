@@ -146,24 +146,36 @@ See the book on the lectern in the schematic for a quick reference and wiring
 instructions.
 
 
-## Sugar Cane Farm
+## Sugar Cane Farm (lite version)
 
-This is a Piston/BUD based sugar cane farm (no observers needed). There are two versions:
+This is a Piston/BUD based sugar cane farm that requires only overworld resources.
 
-- [Sugar Cane Farm (BUD)](https://endingcredits.github.io/litematic-viewer/?remote-url=https%3A%2F%2Fgithub.com%2FBradylus%2FMinecraft%2Fraw%2Frefs%2Fheads%2Fmain%2Fschematics%2FSugar%2520Cane%2520Farm%2520%28BUD%29.litematic),
-  this is the basic model with 15 sugar cane crops. Fairly cheap, requires only
-iron and redstone, your "day two" farm.
+The TL;DR is: if you have enough gold to build a batch of powered rails, or have
+tons of iron, build either of the [Sugar Cane Farm 2x16 (BUD, no slime)](https://endingcredits.github.io/litematic-viewer/?remote-url=https%3A%2F%2Fgithub.com%2FBradylus%2FMinecraft%2Fraw%2Frefs%2Fheads%2Fmain%2Fschematics%2FSugar%2520Cane%2520Farm%25202x16%2520%28BUD%2C%2520no%2520slime%29.litematic)
+and [Sugar Cane Farm 2x16 (BUD, 1 sticky piston)](https://endingcredits.github.io/litematic-viewer/?remote-url=https%3A%2F%2Fgithub.com%2FBradylus%2FMinecraft%2Fraw%2Frefs%2Fheads%2Fmain%2Fschematics%2FSugar%2520Cane%2520Farm%25202x16%2520%28BUD%2C%25201%2520sticky%2520piston%29.litematic)
+variants, depending on your luck in getting some slime. On both of these, the hoppers can be
+replaced by a hopper minecart (in which case the mud can also be replaced by dirt).
 
-- [Sugar Cane Farm x31 (BUD)](https://endingcredits.github.io/litematic-viewer/?remote-url=https%3A%2F%2Fgithub.com%2FBradylus%2FMinecraft%2Fraw%2Frefs%2Fheads%2Fmain%2Fschematics%2FSugar%2520Cane%2520Farm%2520x31%2520%28BUD%29.litematic)
-is 31 blocks long and requires a slime block. This is just a demo to show
-another way to implement the block update detector. This one is actually a
-bit faster. 
+If you're totally broke, go for the [Sugar Cane Farm 2x16 (BUD, no slime, 2 hoppers)](https://endingcredits.github.io/litematic-viewer/?remote-url=https%3A%2F%2Fgithub.com%2FBradylus%2FMinecraft%2Fraw%2Frefs%2Fheads%2Fmain%2Fschematics%2FSugar%2520Cane%2520Farm%25202x16%2520%28BUD%2C%2520no%2520slime%2C%25202%2520hoppers%29.litematic)
+variant. It requires only 2 hoppers but loses some items. Upgrading to one of the other two is
+pretty straightforward once you have the resources.
 
-The glass blocks can be replaced by any solid block or top slab. The white
-concrete can be replaced by any solid block.
+The glass blocks can be replaced by top slabs. The white concrete can be replaced by any solid block.
+On the no-slime variants, if you ever find that the pistons get stuck in the extended position, break the
+topmost repeater (the one facing the long line of redstone on top), then place it back and set it to a
+3 redstone ticks delay (right click twice).
 
-I'd recommend building only the small variant and packing a few of them in a
-single chunk with an ender pearl chunk loader.
+All variants work on the same principle:
+
+- power the pistons without them noticing, thus creating a [block update detector](https://minecraft.wiki/w/Tutorial:Block_update_detector) (also known as a BUD)
+- when a sugar cane plant grows before one of them, it gets updated and propagates the update to
+  all the others (noticing at that point that they are powed)
+- finally, all pistons extend, breaking the sugar cane
+- the blob of redstone at the end of the farm resets the BUD
+
+This farm can be chunk-loaded with an ender pearl chunk loader. Just make sure that all of
+the sugar cane fits in the same chunk as the chunk loader. Some of the redstone will be just
+outside of the central chunk, but this will work just fine.
 
 
 ## Universal Crafter
