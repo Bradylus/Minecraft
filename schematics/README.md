@@ -169,7 +169,7 @@ All variants work on the same principle:
 
 - power the pistons without them noticing, thus creating a [block update detector](https://minecraft.wiki/w/Tutorial:Block_update_detector) (also known as a BUD)
 - when a sugar cane plant grows before one of them, it gets updated and propagates the update to
-  all the others (noticing at that point that they are powed)
+  all the others (noticing at that point that they are powered)
 - finally, all pistons extend, breaking the sugar cane
 - the blob of redstone at the end of the farm resets the BUD
 
