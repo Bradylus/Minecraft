@@ -160,35 +160,141 @@ If you're totally broke, go for the [Sugar Cane Farm 2x16 (BUD, no slime, 2 hopp
 variant. It requires only 2 hoppers but loses some items. Upgrading to one of the other two is
 pretty straightforward once you have the resources.
 
-The glass blocks can be replaced by top slabs. The white concrete can be replaced by any solid block.
-On the no-slime variants, if you ever find that the pistons get stuck in the extended position, break the
-topmost repeater (the one facing the long line of redstone on top), then place it back and set it to a
-3 redstone ticks delay (right click twice).
+The glass blocks can be replaced by top slabs. The white concrete can be
+replaced by any solid block. On the no-slime variants, if you ever find that the
+pistons get stuck in the extended position, break the topmost repeater (the one
+facing the long line of redstone on top), then place it back and set it to a 3
+redstone ticks delay (right click twice).
 
 All variants work on the same principle:
 
 - power the pistons without them noticing, thus creating a [block update detector](https://minecraft.wiki/w/Tutorial:Block_update_detector) (also known as a BUD)
-- when a sugar cane plant grows before one of them, it gets updated and propagates the update to
-  all the others (noticing at that point that they are powered)
+- when a sugar cane plant grows before one of them, it gets updated and propagates
+  the update to all the others (noticing at that point that they are powered)
 - finally, all pistons extend, breaking the sugar cane
 - the blob of redstone at the end of the farm resets the BUD
 
-This farm can be chunk-loaded with an ender pearl chunk loader. Just make sure that all of
-the sugar cane fits in the same chunk as the chunk loader. Some of the redstone will be just
-outside of the central chunk, but this will work just fine.
+This farm can be chunk-loaded with an ender pearl chunk loader. Just make sure
+that all of the sugar cane fits in the same chunk as the chunk loader. Some of
+the redstone will be just outside of the central chunk, but this will work just
+fine.
 
 
 ## Universal Crafter
 
 [Preview](https://endingcredits.github.io/litematic-viewer/?remote-url=https%3A%2F%2Fgithub.com%2FBradylus%2FMinecraft%2Fraw%2Frefs%2Fheads%2Fmain%2Fschematics%2FUniversal%2520Crafter%252012gt.litematic)
 
-This contraption crafts items at a rate of 12 game ticks/item (that's 2/3 hopper speed).
+This machine crafts items at a rate of 12 game ticks/item (2/3 hopper speed).
+This is intended for the occasional crafting of a few stacks of items.
+I personally use two of them, one feeding the other when crafting things like
+dispensers (I just rebuild the hopper line between the two when needed). For
+bulk crafting, check the Storage Tech or TMC Catalogue Discord servers, you'll
+find machines that can craft millions of items per hour.
 
-TODO: how it's working, etc.
+With this kind of design, it's theoretically possible to achieve hopper speed
+by using 5 sides of the crafter for input, but I don't feel like untangling the
+resulting noodle soup of droppers. Parallel crafting is a much saner way to
+achieve higher speeds.
 
-TODO: This requires some setup before use.
+### How this works
 
-TODO: troubleshooting, and what to do on ingredient shortage.
+Items are inserted one row at a time every 4 game ticks, which gives one crafted
+item every 12 game ticks.
 
-It's theoretically possible to achieve hopper speed by using 5 sides of the crafter for input, but
-I don't feel like untangling the resulting noodle soup of droppers.
+Items are inserted in a crafter from left to right, top to bottom. So the top
+left slot is 1st, the top center one is 2nd, and the middle right slot is 6th.
+
+For technical reasons, the item order of the input chests is top to bottom, then
+left to right: items in the 3rd chest will end up in the bottom left slot (slot
+7), and items in the 8th chest will be inserted in the middle right slot (slot
+6). The slot number (and a crude slot map) for each chest is indicated on the
+signs above them:
+
+     1    4    7    2    5    8    3    6    9
+    ■□□  □□□  □□□  □■□  □□□  □□□  □□■  □□□  □□□
+    □□□  ■□□  □□□  □□□  □■□  □□□  □□□  □□■  □□■
+    □□□  □□□  ■□□  □□□  □□□  □■□  □□□  □□□  □□□
+
+So again, chest 1 goes to slot 1, chest 2 to slot 4, 3 to 7, 4 to 2, and so on.
+
+
+### Building the machine
+
+This build is not directional, it can be mirrored and rotated as needed. As
+usual, concrete blocks can be replaced by any solid full block and glass by
+slabs (with some obvious exceptions).
+
+The top 3rd, 6th and 9th droppers (those checked by the comparators) must
+contain a single stackable item (signal strength no greater than 1).
+
+The dropper facing a composter below the top dropper line should contain a
+single non-compostable item (this is usually to prevent noisy clicks, although
+I'll admit that it's probably useless in this specific case).
+
+For the slot map on the signs that indicate the destination slots for the input
+chests, I used the unicode characters ■ (U+25A0) and □ (U+25A1). If you don't
+know how to enter these characters, just copy/paste from the example above.
+
+The item output barrel can be replaced by a dropper, but the last item in a
+batch would get stuck in it until the machine is reset to its initial state. For
+the purge barrel, I don't really see the point of replacing it, but it needs to
+be a powerable container (dropper/dispenser/barrel).
+
+
+### Setting up the machine
+
+Before crafting a new recipe:
+
+- Make sure that the machine is in its initial state: the top 3rd, 6th and
+  9th redstone lamps must be lit. If not, press Manual Advance (note block on
+  the top left) until the proper lamps are lit
+- configure the crafter (just beneath the input chests); only disable slots as
+  needed, no need to prefill the crafter
+- for each disabled slot in the crafter, turn off the corresponding torch in the
+  back of the machine (this is to have the auto shut-off system ignore this slot)
+- insert the ingredients in the input chests
+- start the machine (note block on the bottom left)
+
+If the machine does not start, either some ingredients are missing or the
+disabled slot config in the back is wrong (all torches must be off once all
+ingredients have been added).
+
+Once a crafting batch is complete, the machine will stop in an invalid state.
+You will need to press Manual Advance once to put it back in its initial
+state (see below).
+
+
+### Troubleshooting
+
+The auto-shut off system is too slow to prevent insertion of a partial row of
+items. If all ingredients get consumed, the machine will just need to be reset
+manually to its initial state before the next batch of items. However, if
+it runs out of somw ingredients while crafting, the current item recipe will be
+invalid. To resume crafting in such a situation:
+
+- Flip the lever below the crafter to the "Purge position"
+- Press "Manual Advance" until the machine is in its initial state (3rd, 6th
+  and 9th lamps lit)
+- Flip the lever below the crafter back to the "Normal Operation" position
+- Fill in the missing ingredients (the torches in the back of the machine will
+  be lit for those slots)
+- Press start
+
+In the top row of redstone lamps, the ones that are lit indicate which slots
+should have been filled last. If the machine stops because of missing
+ingredients, you could just correct the corresponding row in the crafter, add
+the missing ingredients, advance manually a couple of times to check that
+everything works as expected before starting the machine again. The method
+descibed above are however more reliable.
+
+If you mess up while refilling, you may end up with multiple items stuck in the
+dropper lines, and the machine will need to be purged to work again:
+
+- remove all input items from the chests, hoppers, and the droppers that are fed
+  by the hoppers)
+- flick the lever to the purge position
+- flick the lever at the very top of the machine to disable the auto-shut off
+- start the machine and let it run until no more items come in the purge barrel
+- reset both levers to their initial positions
+- manually reset the machine to its initial state (3rd, 6th and 9th lamp lit) 
+
