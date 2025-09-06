@@ -196,6 +196,7 @@ by using 5 sides of the crafter for input, but I don't feel like untangling the
 resulting noodle soup of droppers. Parallel crafting is a much saner way to
 achieve higher speeds.
 
+
 ### How this works
 
 Items are inserted one row at a time every 4 game ticks, which gives one crafted
@@ -210,12 +211,16 @@ left to right: items in the 3rd chest will end up in the bottom left slot (slot
 6). The slot number (and a crude slot map) for each chest is indicated on the
 signs above them:
 
-     1    4    7    2    5    8    3    6    9
-    ■□□  □□□  □□□  □■□  □□□  □□□  □□■  □□□  □□□
-    □□□  ■□□  □□□  □□□  □■□  □□□  □□□  □□■  □□■
-    □□□  □□□  ■□□  □□□  □□□  □■□  □□□  □□□  □□□
+    Chest #:        1    2    3    4    5    6    7    8    9
+    
+    Crafter Slot#:  1    4    7    2    5    8    3    6    9
+                   ■□□  □□□  □□□  □■□  □□□  □□□  □□■  □□□  □□□
+                   □□□  ■□□  □□□  □□□  □■□  □□□  □□□  □□■  □□□
+                   □□□  □□□  ■□□  □□□  □□□  □■□  □□□  □□□  □□■
 
-So again, chest 1 goes to slot 1, chest 2 to slot 4, 3 to 7, 4 to 2, and so on.
+Put another way, the first row of items in the crafter comes from chests
+1, 4 and 7, the second row from chests 2, 5 and 8, and the last row from
+chests 3, 6 and 9.
 
 
 ### Building the machine
@@ -228,17 +233,14 @@ The top 3rd, 6th and 9th droppers (those checked by the comparators) must
 contain a single stackable item (signal strength no greater than 1).
 
 The dropper facing a composter below the top dropper line should contain a
-single non-compostable item (this is usually to prevent noisy clicks, although
+single non-compostable item (this is to prevent clicking sounds, although
 I'll admit that it's probably useless in this specific case).
 
 For the slot map on the signs that indicate the destination slots for the input
 chests, I used the unicode characters ■ (U+25A0) and □ (U+25A1). If you don't
 know how to enter these characters, just copy/paste from the example above.
 
-The item output barrel can be replaced by a dropper, but the last item in a
-batch would get stuck in it until the machine is reset to its initial state. For
-the purge barrel, I don't really see the point of replacing it, but it needs to
-be a powerable container (dropper/dispenser/barrel).
+The dropper on the item output from the crafter can be replaced by a barrel.
 
 
 ### Setting up the machine
@@ -250,17 +252,18 @@ Before crafting a new recipe:
   the top left) until the proper lamps are lit
 - configure the crafter (just beneath the input chests); only disable slots as
   needed, no need to prefill the crafter
-- for each disabled slot in the crafter, turn off the corresponding torch in the
-  back of the machine (this is to have the auto shut-off system ignore this slot)
+- for each disabled slot in the crafter, flick the corresponding lever at the
+  back of the machine to extend the piston (this is to have the auto shut-off
+  system ignore this slot)
 - insert the ingredients in the input chests
 - start the machine (note block on the bottom left)
 
-If the machine does not start, either some ingredients are missing or the
-disabled slot config in the back is wrong (all torches must be off once all
-ingredients have been added).
+If the machine does not start, check the pistons at the back of the machines:
+with all ingredients inserted and disabled slots properly configured, all
+pistons should be extended.
 
 Once a crafting batch is complete, the machine will stop in an invalid state.
-You will need to press Manual Advance once to put it back in its initial
+You will need to press Manual Advance twice to put it back in its initial
 state (see below).
 
 
@@ -269,15 +272,15 @@ state (see below).
 The auto-shut off system is too slow to prevent insertion of a partial row of
 items. If all ingredients get consumed, the machine will just need to be reset
 manually to its initial state before the next batch of items. However, if
-it runs out of somw ingredients while crafting, the current item recipe will be
+it runs out of an ingredient while crafting, the current item recipe will be
 invalid. To resume crafting in such a situation:
 
 - Flip the lever below the crafter to the "Purge position"
 - Press "Manual Advance" until the machine is in its initial state (3rd, 6th
   and 9th lamps lit)
 - Flip the lever below the crafter back to the "Normal Operation" position
-- Fill in the missing ingredients (the torches in the back of the machine will
-  be lit for those slots)
+- Fill in the missing ingredients (the pistons at the back of the machine will
+  be retracted for slots with missing ingredients)
 - Press start
 
 In the top row of redstone lamps, the ones that are lit indicate which slots
@@ -285,7 +288,7 @@ should have been filled last. If the machine stops because of missing
 ingredients, you could just correct the corresponding row in the crafter, add
 the missing ingredients, advance manually a couple of times to check that
 everything works as expected before starting the machine again. The method
-descibed above are however more reliable.
+descibed above is however less error prone.
 
 If you mess up while refilling, you may end up with multiple items stuck in the
 dropper lines, and the machine will need to be purged to work again:
@@ -293,7 +296,7 @@ dropper lines, and the machine will need to be purged to work again:
 - remove all input items from the chests, hoppers, and the droppers that are fed
   by the hoppers)
 - flick the lever to the purge position
-- flick the lever at the very top of the machine to disable the auto-shut off
+- flick the lever at the back machine to disable the auto-shut off
 - start the machine and let it run until no more items come in the purge barrel
 - reset both levers to their initial positions
 - manually reset the machine to its initial state (3rd, 6th and 9th lamp lit) 
