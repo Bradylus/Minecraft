@@ -1,5 +1,14 @@
 # Schematics
 
+## Bamboo Farm 1.21+
+
+[Preview](https://endingcredits.github.io/litematic-viewer/?remote-url=https%3A%2F%2Fgithub.com%2FBradylus%2FMinecraft%2Fraw%2Frefs%2Fheads%2Fmain%2Fschematics%2FBamboo%2520Farm%2FBamboo%2520Farm%25207x6x1.litematic)
+
+This is a stackable, flying-machine based bamboo farm that should also work for any other
+tall plant, even cacti. It achieves high rates (20 to 29K bamboo/hour per layer) at a very low MSPT.
+
+See the [Bamboo Farm](https://github.com/Bradylus/Minecraft/tree/main/schematics/Bamboo%20Farm) folder.
+
 
 ## Redstone Counters
 
@@ -146,9 +155,9 @@ See the book on the lectern in the schematic for a quick reference and wiring
 instructions.
 
 
-## Sugar Cane Farm (lite version)
+## Starter Sugar Cane Farm
 
-This is a Piston/BUD based sugar cane farm that requires only overworld resources.
+This is a Piston/BUD based sugar cane farm that requires only overworld resources for the early game.
 
 The TL;DR is: if you have enough gold to build a batch of powered rails, or have
 tons of iron, build either of the [Sugar Cane Farm 2x16 (BUD, no slime)](https://endingcredits.github.io/litematic-viewer/?remote-url=https%3A%2F%2Fgithub.com%2FBradylus%2FMinecraft%2Fraw%2Frefs%2Fheads%2Fmain%2Fschematics%2FSugar%2520Cane%2520Farm%25202x16%2520%28BUD%2C%2520no%2520slime%29.litematic)

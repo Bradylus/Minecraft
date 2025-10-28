@@ -1,5 +1,7 @@
 # Bamboo Farm 1.21+
 
+[Preview](https://endingcredits.github.io/litematic-viewer/?remote-url=https%3A%2F%2Fgithub.com%2FBradylus%2FMinecraft%2Fraw%2Frefs%2Fheads%2Fmain%2Fschematics%2FBamboo%2520Farm%2FBamboo%2520Farm%25207x6x1.litematic)
+
 This is a flying-machine based bamboo farm that should also work for any other
 tall plant, even cacti.
 
