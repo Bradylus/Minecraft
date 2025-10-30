@@ -109,6 +109,7 @@ refernce, this gives:
 
 Harvesting the middle point every 4096 game ticks:
 
+    w = i - 240 - d0 - 10×l 
     w = 3582 - 10×l
 
 The number of items in the delay circuit is `⌈(w-2)/16⌉` (round up). For a 7
@@ -128,17 +129,19 @@ Departure time of the bottom harvester + 12 blocks of clearance (120 ticks trave
 time). Note that `d0` for the bottom layer is d0 + 4(n-1):
 
     t0 = h(n-1) + d0 + 4(n-1) + 120
-    ⇔ t0 = (h+4)(n-1) + 394
+    ⇔ t0 = (h+4)(n-1) + d0 + 120
 
 Time for the top harvester to do a full two way trip, minus 12 blocks:
 
     t1 = d0 + 2×t + w + d0 - 120
-    ⇔ t1 = 10×l + 4490
+    ⇔ t1 = 20×l + 2×d0 + 480 - 120 + i - 240 - d0 - 10×l
+    ⇔ t1 = 10×l + d0 + 120 + i
 
 Solve `t0 ≤ t1` for `h`:
 
-    (h+4)(n-1) + 394 ≤ 10×l + 4490
-    ⇔ h ≤ (10×l + 4096) / (n - 1) - 4
+    (h+4)(n-1) + d0 + 120 ≤ 10×l + d0 + 120 + i
+    ⇔ (h+4)(n-1) ≤ 10×l + i
+    ⇔ h ≤ (10×l+4096)/(n-1) - 4
 
 The number of items in the hopper clock is `⌊(h+12)/16⌋` (round down this time).
 
