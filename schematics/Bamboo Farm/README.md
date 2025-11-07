@@ -10,8 +10,8 @@ are not necessarily a good option because of the fairly high MSPT cost of the
 bonemeal farms themselves.
 
 This farm is very much inspired by Ilmango's [Improved Jumping Hopper Minecart
-Bamboo Farm] but with 12 blocks wide blades and running at a much lower MSPT for
-the same production rates (see the [References section](#references)).
+Bamboo Farm] but with 12 blocks wide blades and running at a lower MSPT for the
+same production rates (see the [References section](#references)).
 
 
 ## Features
@@ -28,7 +28,10 @@ to planks (31K planks/h).
   usually push one blade while pulling the one for the reverse direction.
   This saves about 30% on the MSPT caused by the flying machines themselves.
 - Hopper minecarts are only dispensed when needed.
-
+- Single minecart distribution and collection system on each side of the farm.
+- Expandable horizontally and vertically, from 6 chunks long × 12 blocks wide on
+  a sinle layer (~18K bamboo/h), to 10 chunks long × 36 blocks wide × 27 layers
+  (2.4M bamboo/h).
 
 ## Technical details
 
@@ -95,8 +98,7 @@ an additional layer, at a lesser performance cost.
 - let `w` be the waiting time for a flying machine before it is sent back
 - let `h` be the delay between two flying machines
 - let `d0` be the time between the delay clock ticking and the actual
-  departure time of the top harvester. On a 12 blocks wide farm, this is 274
-  game ticks.
+  departure time of the top harvester. This is 104 game ticks.
 - let `n` be the number of layers
 - let `i` be the harvesting interval for the midpoint of the farm.
 
@@ -110,7 +112,7 @@ refernce, this gives:
 Harvesting the middle point every 4096 game ticks:
 
     w = i - 240 - d0 - 10×l 
-    w = 3582 - 10×l
+    w = 3752 - 10×l
 
 The number of items in the delay circuit is `⌈(w-2)/16⌉` (round up). For a 7
 chunks long farm, 112 blocks, we get 153.75, rounded up gives 154, that's 2
@@ -126,7 +128,7 @@ the bottommost harvester to have left its station and cleared the minecart drop
 area before the top one enters that same area.
 
 Departure time of the bottom harvester + 12 blocks of clearance (120 ticks travel
-time). Note that `d0` for the bottom layer is d0 + 4(n-1):
+time). Note that `d0` for the bottom layer is `d0 + 4(n-1)`:
 
     t0 = h(n-1) + d0 + 4(n-1) + 120
     ⇔ t0 = (h+4)(n-1) + d0 + 120
@@ -145,17 +147,23 @@ Solve `t0 ≤ t1` for `h`:
 
 The number of items in the hopper clock is `⌊(h+12)/16⌋` (round down this time).
 
+The absolute minimum value for `h` is 180 game ticks (12 items in the hopper
+clock). This is the time needed for a flying machine to clear its station and
+allow the next one to move without getting stuck. As a result, we cannot have an
+unlimited number of layers (see [maximum number of layers](#maximum-number-of-layers)
+below).
+
 <details>
 <summary>Sacrificing MSPT for higher rates…</summary>
 For higher rates without making the farm larger, let's see the timings so that
 the far ends of the farm are harvested at most every 4096 game ticks:
 
     i = 10×(l+24) + w + d0 + 10×l
-    ⇔ w = 3582 - 20×l
+    ⇔ w = 3752 - 20×l
 
-    t1 = d0 + 2×t + w + d0 - 120 = 4490
+    t1 = d0 + 2×t + w + d0 - 120 = 4320
 
-    t0 ≤ t1 ⇔ (h+4)(n-1) + 394 ≤ 4490
+    t0 ≤ t1 ⇔ (h+4)(n-1) + 224 ≤ 4320
             ⇔ h ≤ 4096 / (n-1) - 4
 
 Interestingly, `h` only depends on the number of layers in this case. With
@@ -174,53 +182,74 @@ items out of the farm.
 
 ### Farm size
 
+#### Bamboo field length
+
 When speaking of farm length, I only consider the planted area, the harvester
 stations take one additional chunk on each end.
 
-For the maximum farm length, `w` must be greater than 0, so `l ≤ 359` which is
-just a bit over 22 chunks. However, hopper minecarts can only carry 320 items.
+For the maximum farm length, `w` must be greater than 0, so `l ≤ 375` which is
+just a bit over 23 chunks. However, hopper minecarts can only carry 320 items.
 With `i` set to 4096 game ticks, the average amount of bamboo collected per
-run would be ~377, which does not fit. Also if the bamboo is somehow allowed to
-grow without harvesting, on the first run you'd end up with 12×12×16 bamboo not
-collected per layer, and as many entities lying around for the next 10 minutes,
-causing a serious lag spike.
+run would be ~377, which does not fit.
 
-When planning your farm size, I'd recommend making it as long as the simulation
-distance so that a player can keep the farm loaded while standing at either end
-should the chunk loaders fail, but no longer than 10 chunks.
+TODO: it's over 377 now with the longer possible farm.
 
-A 10 chunks long farm (12 chunks total), would do nicely in single player where
-the default render distance is 12 chunks. In multiplayer, with most servers
-configured for an 8 chunks simulation distance, I'd recommend a 7 chunks long
-farm (+2 for the stations); just make sure that the chunk loaders are running
-while putting the final touches to your farm.
+That said, I'd recommend making the field between 6 and 8 chunks long, depending
+on your simulation distance. The rationale is that:
 
-While the rates (and MSPT) increase linearly with each layer, extending the
-length of the farm will increase the rates with diminishing returns.
+- With an 8 chunks simulation distance (this is 9 chunks in fact, including the
+  one the player is standing in), making the field 6 chunks long + 2 for the
+  stations allows the player to stand at either end of the farm without worrying
+  about it getting unloaded
+- Regardless of simulation distance and with the help of chunk loaders, also
+  keeping in mind that minecarts can only carry 320 items, it could be extended
+  to 10 chunks (160 blocks × 2 bamboo per block). In theory. However, tests
+  showed that not all items are picked up on the on the first run in the last
+  two chunks, resulting in a lot of entities flying about and a huge lag spike
+  for the first 5 minutes of operation.
+
+Additionally, while the rates (and MSPT) increase linearly with each layer,
+extending the length of the farm will increase the rates with diminishing
+returns (but allow for more layers).
 
 Here are the rates for some configurations I have tested (all are only 12 blocks
 wide):
 
 | Field length | Total length | Layers | Rates | items/h/plant | MSPT |
 | -----------: | -----------: | -----: | ----: | ------------: | ---: |
-|          112 |          144 |      6 | 125.0K | 15.55        |  1.4 |
-|          112 |          144 |      7 | 146.0K | 15.55        |  1.5 |
-|          112 |          144 |      8 | 166.8K | 15.55        |  1.7 |
-|          112 |          144 |     10 | 208.5K | 15.55        |  2.0 |
+|          112 |          144 |      6 | 124.8K | 15.55        |  1.5 |
+|          112 |          144 |      8 | 166.4K | 15.55        |  1.7 |
+|          112 |          144 |     10 | 208.0K | 15.55        |  2.0 |
 |          160 |          196 |      7 | 207.3K | 15.42        |  2.3 |
 
 The last two have the same total surface area, however the 7 chunks long version
 has higher rates for a lower MSPT.
 
-The minimum value for `h` is 212 game ticks (14 items in the hopper clock).
-This is the time needed for the minecart dispenser to do a full run and reset.
-So the maximum number of layers is:
 
-    (10×l + 4096)/(n-1) - 4 ≥ 212
-    ⇔ n ≤ (10×l + 4312)/216
+#### Maximum number of layers
+
+The time between the clock ticking and a flying machine signaling that it has
+left its station is `d0 + 4n` game ticks. If the clock period `h` is less than
+this value, this would cause problems when the last harverster leaves and the
+top one arrives (like skipping the wait time, or minecarts dispensed on the top
+one without it leaving, etc.). This gives us:
+
+    h ≥ d0 + 4n
+    ⇔ (10×l + 4096)/(n-1) - 4 ≥ 104 + 4n
+    ⇔ n ≥ sqrt(10×l + 4880)/2 - 13
 
 For a 7 chunks long farm, that's 25 layers (~521K bamboo/hour) and 27 for a
 10 chunks farm (800K bamboo/hour).
+
+Note that the pulse extender for the delay between dispensing the minecarts and
+lauchning the harvesters is designed for up to 27 layers.
+
+
+#### Expanding sideways
+
+With the same minecart distribution and collection system, the farm can be
+expanded sideways, up to a width of 36 blocks, multiplying rates AND MSPT by 3.
+See the *XL* versions of the schematics.
 
 
 ## Chunk loaders
@@ -230,7 +259,7 @@ last harvester launched comes back. The delay `c` corresponds the the worst
 case (a full 2-way trip) plus 200 game ticks (10s) to collect the minecarts:
 
     c = 2(d0 + t) + w + 200
-    ⇔ c = 10×l + 4810
+    ⇔ c = 10×l + 4640
 
 For the *overclocked* version where we harvest the farm ends every 4096 game
 ticks, that's just 4810, regardless of the farm size.
@@ -243,50 +272,38 @@ hopper clock pulse extender. The total number of items should be `⌈(c + 12)/32
 ## Notes
 
 Like all farms of this kind, it needs to be orientated East-West so that the
-hopper-carts stay in place.
+hopper-carts don't push each other.
 
-The schematic is only a demo with a 7 chunks × 6 layers × 12 blocks version. It
+TODO: redo this. The schematic is only a demo with a 7 chunks × 6 layers × 12 blocks version. It
 is more than enough to feed a medium furnace array (up to 115 furnaces) with
 bamboo planks. I intend to include a 10 chunks × 27 layers × 36 at some point to
 show how to do it.
-
-I'd like to be able to fit a quadruple version, but I'd need to redesign part
-of the minecart collection and dispenser to make it fit in the same chunk as
-the flying machine holding stations.
 
 The bottom piston of the double extender that swaps the trapdoors needs to stay
 extended so that the flying machine of the next layer down does not stick to it.
 It's working flawlessly, yet it could probably be made simpler (like having both
 pistons fully extended?).
 
-Minecart dispensing happens at 10gt/minecart. Couldn't get it to work at hopper
-speed. At that speed, the observers/traps beneath the pistons pushing the rails
-could be replaced by a pair of torches if it did not conflict with the item
-counter's wiring. Making it work at hopper speed with a better item counter
-could help shorten the minimum delay between harvesters and increase the maximum
-number of layers.
+The first iterations of this farm used a minecart distribution system by Ilmango
+(see the [References](#references) section), but it was too slow for the wider
+versions of the farm. So I ended up using a custom equal item distibution
+system, inspired by RaPsCaLLioN1138's [#Better Equal Item Distribution] system,
+but cheaper. It's more complex than the previous system but I don't want to
+maintain different systems that serve the same purpose.
 
 When setting up the delay circuits, make sure to prevent them from triggering
 unexpectedly by powering the non-sticky piston with a redstone block.
-
-When building the item counter, place the items in the dropper only once the
-full circuit is built (the comparator should not output any signal).
-
-I did not test with more than 10 layers, but I'm pretty sure that the current
-delay circuit (the 2 comparators wired to the last minecart dropping) is not
-enough for much more layers. This needs to be tested and `d0` updated
-accordingly. 
 
 The item collection system at the bottom is unfiltered because the input is
 irregular and even for a farm producing only 146K/h, filtering would require
 enough filters to handle ~21 stacks of items at once (~58 filters). Even without
 filtering, there's a system to push item entities over the hoppers every 8 gt
 in order to limit the number of hoppers required. Filtering the output from the
-crafters is much less of an problem (only 16200 bamboo blocks/h), and should
-some unwanted item get into the crafters, this is a only a minor annoyance and
-an easy fix.
+crafters is much less problematic (only 16200 bamboo blocks/h), and should some
+unwanted item get into the crafters, this is a only a minor annoyance and an
+easy fix.
 
-To fully filter the output, A 500K bamboo/hour farm, requires at least 28 double
+To fully filter the output, A 500K bamboo/hour farm requires at least 28 double
 speed filters, and to accomodate for the irregular input rate, one solution
 would be to buffer the entites and use an entity separation system to send ~64
 items over the hoppers every 8gt.
@@ -298,28 +315,31 @@ endermen can get into the farm and steal farmland…
 To place the dirt and glass, Glowsquid's [Automatic Floor Builder] should come
 in handy.
 
+TODO: test this again. While bamboo grows even at night on the surface, it looks
+like it only checks for sky access, not the acutual light level (from the sky).
 
 ## References
 
 As mentionned in the intro, this farm is heavily based on tall plant farms by
 Ilmango:
-- [Mega Base Friendly Sugar Cane Farm]: reused the minecart distribution system
-  from this farm as it made the stackable farm cheaper to build and the minecart
-  handling easier.
+- [Mega Base Friendly Sugar Cane Farm]: The base idea for this farm: a flying
+  machine pushing minecarts sitting on trapdoors.
 - [Improved Jumping Hopper Minecart Bamboo Farm]: for the idea to have the
   flying machine move a single blade.
-- [10 Million Bamboo Per Hour]: make the farm stackable.
+- [10 Million Bamboo Per Hour]: make the farm stackable
 
-Ilmango went for a solution with narrower blades and trapdoors to hold the
-hopper minecarts on both sides of the blade. I really wanted to find a way to
-keep the 12 blocks blade and flip the trapdoors around. A couple of years ago,
-I made a working design based on the idea of looping over two layers (see
-[10 Million Bamboo Per Hour]), but it ended up not being easily stackable, and
-was a nightmare to build. So I went back to the drawing board and came up with
-this design. With careful adjustment of the timings, it has similar rates to a
-looping version and is stackable every 5 blocks with a lower overall MSPT.
+Ilmango went for a solution with narrower blades (8 wide instead of 12) and
+trapdoors to hold the hopper minecarts on both sides of the blade. I really
+wanted to find a way to keep the 12 blocks blade and flip the trapdoors around.
+A couple of years ago, I made a working design based on the idea of looping over
+two layers (see [10 Million Bamboo Per Hour]), but it ended up not being easily
+stackable, and was a nightmare to build. So I went back to the drawing board and
+came up with this design. With careful adjustment of the timings, it has similar
+rates to a looping version and is stackable every 5 blocks with a lower overall
+MSPT.
 
 [Mega Base Friendly Sugar Cane Farm]: https://www.youtube.com/watch?v=-mzdU-mk7JA
 [Improved Jumping Hopper Minecart Bamboo Farm]: https://www.youtube.com/watch?v=yzwRwlwWlz0
 [10 Million Bamboo Per Hour]: https://www.youtube.com/watch?v=xlEnKWqXOdI
 [Automatic Floor Builder]: https://www.youtube.com/watch?v=aA4V4Ws8_ig
+[Better Equal Item Distribution]: https://www.youtube.com/watch?v=OLmTVOTT9e8
